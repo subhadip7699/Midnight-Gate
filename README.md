@@ -13,21 +13,15 @@
 
 <br /><br />
 
-  <h3>
-    🌐 <a href="#">Live Demo Website</a>
-    &nbsp;&nbsp;•&nbsp;&nbsp;
-    🎬 <a href="#-demo">Demo Video Walkthrough</a>
-    &nbsp;&nbsp;•&nbsp;&nbsp;
-    🏗 <a href="#-architecture">Architecture</a>
-  </h3>
 
   <br />
-  <a href="">
+  <a href="#3-ci--cd-running">
     <img src="https://img.shields.io/badge/CI%2FCD-passing-brightgreen?style=for-the-badge" alt="CI/CD Pipeline Status" />
   </a>
 </div>
 <br />
-<img width="2534" height="1314" alt="image" src="https://github.com/user-attachments/assets/f24ed750-4d7c-4a84-8402-026a6d941047" />
+<img width="1887" height="912" alt="image" src="https://github.com/user-attachments/assets/50779a4f-4fc0-4b1b-800e-9a0146d5764f" />
+
 <br />
 <br />
 
@@ -38,14 +32,14 @@
 ---
 ## 🌒 Moonshots Level 1 → 3 — Requirements & Submission Checklist
 ## 🌐 Live Demo
-
+[https://nexora-app-chi-indol.vercel.app/](https://nexora-app-chi-indol.vercel.app/)
 
 ---
 
 ## 📋 Quick Links & CheckList
 | Network     | Address                                                              |
 | ----------- | -------------------------------------------------------------------- |
-| **🌐Live Demo** |  |
+| **🌐Live Demo** | [https://nexora-app-chi-indol.vercel.app/](https://nexora-app-chi-indol.vercel.app/) |
 | **Preprod** | `0x85c6d5ce4fec74c33a17d4307290bf7d05878637b9f2e70bead1d90bdf5353cc` |
 | **Demo Video** |[Watch the Nexora Demo Video on Google Drive](https://drive.google.com/file/d/1kORStuYk75lLGvJRnh2td8-BcJ3vEhAo/view?usp=sharing) |
 | CI/CD pipeline running (workflow file + passing runs)                 |               ✅ **Passed**                |
@@ -84,6 +78,7 @@
 
 ### 3. CI & CD Running 
 
+<img width="1871" height="647" alt="image" src="https://github.com/user-attachments/assets/010f9a26-6eef-4259-b431-aa8293e70d2a" />
 
 ### 4. Commit Over 30 meaningful commits   ✅ **Passed**  
 
