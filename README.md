@@ -38,14 +38,14 @@
 ---
 ## 🌒 Moonshots Level 1 → 3 — Requirements & Submission Checklist
 ## 🌐 Live Demo
-[https://nexora-app-web3.vercel.app/](https://nexora-app-web3.vercel.app/)
+
 
 ---
 
 ## 📋 Quick Links & CheckList
 | Network     | Address                                                              |
 | ----------- | -------------------------------------------------------------------- |
-| **🌐Live Demo** | [https://nexora-app-web3.vercel.app/](https://nexora-app-web3.vercel.app/) |
+| **🌐Live Demo** |  |
 | **Preprod** | `0x85c6d5ce4fec74c33a17d4307290bf7d05878637b9f2e70bead1d90bdf5353cc` |
 | **Demo Video** |[Watch the Nexora Demo Video on Google Drive](https://drive.google.com/file/d/1kORStuYk75lLGvJRnh2td8-BcJ3vEhAo/view?usp=sharing) |
 | CI/CD pipeline running (workflow file + passing runs)                 |               ✅ **Passed**                |
