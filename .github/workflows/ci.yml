@@ -43,7 +43,7 @@ jobs:
         run: npm run compile --workspace=contracts
 
       - name: Sync Compact artifacts
-        run: npm run sync:artifacts --workspace=contracts
+        run: npm run sync-artifacts --workspace=midnight-contracts
 
       - name: Test smart contract
         run: npm run test --workspace=contracts
