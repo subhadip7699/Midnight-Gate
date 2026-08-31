@@ -36,7 +36,6 @@ import {
   restorePublishedGate,
   saveGate,
   shorten,
-  vaultUrl,
   type GateRecord,
 } from "@/lib/gate-store";
 import { explorerContractUrl, explorerTransactionUrl } from "@/lib/explorer";
@@ -61,6 +60,29 @@ type UiStatus = {
 
 type ContractStatus = "idle" | "checking" | "published" | "unpublished" | "error";
 type ActionContext = "deploy" | "enroll" | "prove";
+
+type GateDraft = {
+  sourceKey: string;
+  name: string;
+  description: string;
+  privateContent: string;
+};
+
+type KeyedGateState = {
+  sourceKey: string;
+  gate: GateRecord;
+};
+
+type KeyedBooleanState = {
+  sourceKey: string;
+  value: boolean;
+};
+
+type ContractStatusState = {
+  contractId: string;
+  status: ContractStatus;
+  detail: string;
+};
 
 const titles = {
   admin: {
@@ -283,10 +305,15 @@ export function GateConsole({ mode }: GateConsoleProps) {
     network: firstParam(searchParams.get("network")),
   });
 
-  const [localGate, setLocalGate] = useState<GateRecord | null>(null);
-  const [gateName, setGateName] = useState(resolvedGate.name);
-  const [gateDescription, setGateDescription] = useState(resolvedGate.description);
-  const [privateContent, setPrivateContent] = useState(resolvedGate.privateContent);
+  const resolvedGateKey = JSON.stringify([
+    resolvedGate.id,
+    resolvedGate.name,
+    resolvedGate.description,
+    resolvedGate.privateContent,
+    resolvedGate.contractId,
+  ]);
+  const [localGateState, setLocalGateState] = useState<KeyedGateState | null>(null);
+  const [gateDraft, setGateDraft] = useState<GateDraft | null>(null);
   const [session, setSession] = useState<SessionInfo | null>(null);
   const [walletName, setWalletName] = useState<string | null>(null);
   const [walletRdns, setWalletRdns] = useState<string | null>(null);
@@ -295,15 +322,14 @@ export function GateConsole({ mode }: GateConsoleProps) {
   const [walletModalOpen, setWalletModalOpen] = useState(false);
   const [walletConnecting, setWalletConnecting] = useState(false);
   const [credential, setCredential] = useState("");
-  const [credentialIssued, setCredentialIssued] = useState(false);
-  const [accessGranted, setAccessGranted] = useState(false);
+  const [credentialIssuedState, setCredentialIssuedState] = useState<KeyedBooleanState | null>(null);
+  const [accessGrantedState, setAccessGrantedState] = useState<KeyedBooleanState | null>(null);
   const [restoreAddress, setRestoreAddress] = useState("");
   const [stage, setStage] = useState<ProgressStage>("idle");
   const [actionContext, setActionContext] = useState<ActionContext>("prove");
   const [busy, setBusy] = useState(false);
   const [lastTx, setLastTx] = useState<string | null>(null);
-  const [contractStatus, setContractStatus] = useState<ContractStatus>("idle");
-  const [contractStatusDetail, setContractStatusDetail] = useState("");
+  const [contractStatusState, setContractStatusState] = useState<ContractStatusState | null>(null);
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [status, setStatus] = useState<UiStatus>({
     tone: "info",
@@ -311,7 +337,45 @@ export function GateConsole({ mode }: GateConsoleProps) {
     message: "Start with the next highlighted step.",
   });
 
+  const localGate = localGateState?.sourceKey === resolvedGateKey ? localGateState.gate : null;
   const current = localGate ?? resolvedGate;
+  const activeDraft = gateDraft?.sourceKey === resolvedGateKey ? gateDraft : null;
+  const gateName = activeDraft?.name ?? resolvedGate.name;
+  const gateDescription = activeDraft?.description ?? resolvedGate.description;
+  const privateContent = activeDraft?.privateContent ?? resolvedGate.privateContent;
+  const credentialIssued = credentialIssuedState?.sourceKey === resolvedGateKey && credentialIssuedState.value;
+  const accessGranted = accessGrantedState?.sourceKey === resolvedGateKey && accessGrantedState.value;
+  const contractId = current.contractId;
+  const matchingContractStatus = contractId && contractStatusState?.contractId === contractId
+    ? contractStatusState
+    : null;
+  const contractStatus: ContractStatus = !contractId
+    ? "idle"
+    : !isValidContractId(contractId)
+      ? "unpublished"
+      : matchingContractStatus?.status ?? "checking";
+  const contractStatusDetail = !contractId
+    ? ""
+    : !isValidContractId(contractId)
+      ? "The saved gate address is not a valid Preprod contract address."
+      : matchingContractStatus?.detail ?? "Checking the saved gate on Midnight Preprod.";
+
+  const updateGateDraft = (update: Partial<Omit<GateDraft, "sourceKey">>) => {
+    setGateDraft((previous) => ({
+      sourceKey: resolvedGateKey,
+      name: previous?.sourceKey === resolvedGateKey ? previous.name : resolvedGate.name,
+      description: previous?.sourceKey === resolvedGateKey ? previous.description : resolvedGate.description,
+      privateContent: previous?.sourceKey === resolvedGateKey ? previous.privateContent : resolvedGate.privateContent,
+      ...update,
+    }));
+  };
+
+  const setGateName = (name: string) => updateGateDraft({ name });
+  const setGateDescription = (description: string) => updateGateDraft({ description });
+  const setPrivateContent = (content: string) => updateGateDraft({ privateContent: content });
+  const setLocalGate = (gate: GateRecord) => setLocalGateState({ sourceKey: resolvedGateKey, gate });
+  const setCredentialIssued = (value: boolean) => setCredentialIssuedState({ sourceKey: resolvedGateKey, value });
+  const setAccessGranted = (value: boolean) => setAccessGrantedState({ sourceKey: resolvedGateKey, value });
   const configured = gateName.trim().length > 0 && gateDescription.trim().length > 0;
   const hasContractAddress = Boolean(current.contractId && isValidContractId(current.contractId));
   const contractChecking = hasContractAddress && (contractStatus === "idle" || contractStatus === "checking");
@@ -343,37 +407,36 @@ export function GateConsole({ mode }: GateConsoleProps) {
   };
 
   useEffect(() => {
-    setGateName(resolvedGate.name);
-    setGateDescription(resolvedGate.description);
-    setPrivateContent(resolvedGate.privateContent);
-    setLocalGate(null);
-    setCredentialIssued(false);
-    setAccessGranted(Boolean(getGateAccess(resolvedGate.id)));
-  }, [resolvedGate.id, resolvedGate.name, resolvedGate.description, resolvedGate.privateContent, resolvedGate.contractId]);
+    let active = true;
+    queueMicrotask(() => {
+      if (!active) return;
+      setAccessGrantedState({
+        sourceKey: resolvedGateKey,
+        value: Boolean(getGateAccess(resolvedGate.id)),
+      });
+    });
+    return () => {
+      active = false;
+    };
+  }, [resolvedGate.id, resolvedGateKey]);
 
   useEffect(() => {
-    setWallets(client.getInjectedWallets());
+    let active = true;
+    const frame = window.requestAnimationFrame(() => {
+      if (active) setWallets(client.getInjectedWallets());
+    });
     return () => {
+      active = false;
+      window.cancelAnimationFrame(frame);
       client.dispose();
     };
   }, [client]);
 
   useEffect(() => {
     const contractId = current.contractId;
-    if (!contractId) {
-      setContractStatus("idle");
-      setContractStatusDetail("");
-      return;
-    }
-    if (!isValidContractId(contractId)) {
-      setContractStatus("unpublished");
-      setContractStatusDetail("The saved gate address is not a valid Preprod contract address.");
-      return;
-    }
+    if (!contractId || !isValidContractId(contractId)) return;
 
     let active = true;
-    setContractStatus("checking");
-    setContractStatusDetail("Checking the saved gate on Midnight Preprod.");
     verifyContractIndexed(contractId)
       .then((lookup) => {
         if (!active) return;
@@ -381,29 +444,46 @@ export function GateConsole({ mode }: GateConsoleProps) {
           const restored = restorePublishedGate({
             id: current.id,
             contractId: lookup.resolvedAddress,
-            name: gateName,
-            description: gateDescription,
-            privateContent,
+            name: current.name,
+            description: current.description,
+            privateContent: current.privateContent,
             deploymentTxId: current.deploymentTxId,
           });
-          setLocalGate(restored);
-          setContractStatus("published");
-          setContractStatusDetail("The gate is live on Midnight Preprod.");
+          setLocalGateState({ sourceKey: resolvedGateKey, gate: restored });
+          setContractStatusState({
+            contractId: restored.contractId!,
+            status: "published",
+            detail: "The gate is live on Midnight Preprod.",
+          });
         } else {
-          setContractStatus("unpublished");
-          setContractStatusDetail("The saved address was not found on Midnight Preprod.");
+          setContractStatusState({
+            contractId,
+            status: "unpublished",
+            detail: "The saved address was not found on Midnight Preprod.",
+          });
         }
       })
       .catch((error) => {
         if (!active) return;
-        setContractStatus("error");
-        setContractStatusDetail(error instanceof Error ? error.message : "Could not verify the saved gate.");
+        setContractStatusState({
+          contractId,
+          status: "error",
+          detail: error instanceof Error ? error.message : "Could not verify the saved gate.",
+        });
       });
 
     return () => {
       active = false;
     };
-  }, [current.contractId]);
+  }, [
+    current.contractId,
+    current.deploymentTxId,
+    current.description,
+    current.id,
+    current.name,
+    current.privateContent,
+    resolvedGateKey,
+  ]);
 
   const saveConfiguration = () => {
     const next: GateRecord = {
@@ -478,7 +558,11 @@ export function GateConsole({ mode }: GateConsoleProps) {
             deploymentTxId: current.deploymentTxId,
           });
           setLocalGate(restored);
-          setContractStatus("published");
+          setContractStatusState({
+            contractId: restored.contractId ?? existing.resolvedAddress,
+            status: "published",
+            detail: "The gate is live on Midnight Preprod.",
+          });
           setStatus({
             tone: "success",
             title: `${restored.name} published`,
@@ -502,7 +586,11 @@ export function GateConsole({ mode }: GateConsoleProps) {
         privateContent,
       });
       setLocalGate(next);
-      setContractStatus("published");
+      setContractStatusState({
+        contractId: next.contractId ?? formatContractId(deployed.contractId),
+        status: "published",
+        detail: "The gate is live on Midnight Preprod.",
+      });
       setLastTx(deployed.txId);
       setStage("confirmed");
       setStatus({
@@ -535,7 +623,11 @@ export function GateConsole({ mode }: GateConsoleProps) {
       setGateName(restored.name);
       setGateDescription(restored.description);
       setPrivateContent(restored.privateContent);
-      setContractStatus("published");
+      setContractStatusState({
+        contractId: restored.contractId ?? lookup.resolvedAddress,
+        status: "published",
+        detail: "The gate is live on Midnight Preprod.",
+      });
       setStage("idle");
       setStatus({
         tone: "success",
@@ -668,7 +760,6 @@ export function GateConsole({ mode }: GateConsoleProps) {
     const next = resetGateToDraft(current);
     setLocalGate(next);
     setLastTx(null);
-    setContractStatus("idle");
     setStatus({
       tone: "warning",
       title: "Draft reset",
