@@ -30,7 +30,24 @@
 **Nexora** replaces traditional wallet-based allowlists and token-gated access with a Zero-Knowledge Merkle membership proof. Members prove they hold a valid, enrolled credential and generate a single-use nullifier locally in their browser — nothing sensitive ever touches the chain. Built for the **First Quarter (Level 3)** challenge as part of the **RiseIn & Midnight Foundation "New Moon to Full: Monthly Moonshots on Midnight" Program 2026**.
 
 ---
-## 🌒 Moonshots Level 1 → 3 — Requirements & Submission Checklist
+## Level 6 Users
+See [`LAUNCH_USERS.md`](./Documents/LAUNCH_USERS.md)
+
+## Level 5 - User Validation & Iteration
+- **Target:** 50 Preprod users
+- **Current Verified:** 50 / 50
+- **User Directory:** See [`USERS.md`](./Documents/USERS.md) for full verified addresses.
+- **Feedback & Changes:** See [`Documents/FEEDBACK.md`](./Documents/FEEDBACK.md) for raw feedback logs, feedback themes, and applied code iterations.
+
+## Feedback & Iterations
+See [`docs/FEEDBACK.md`](./docs/FEEDBACK.md) for full details.
+Summary of top changes made from user feedback:
+* **Gas Onboarding:** Added a tDUST faucet banner to prevent zero-gas transaction failures for first-time Preprod testers.
+* **Prover Latency & UI Locking:** Implemented a frontend loading spinner and disabled button states during local ZK proof generation to prevent accidental double-clicking.
+* **Input Validation & Context:** Added client-side input validation for positive numbers to prevent circuit crashes, along with a visual tier legend (Bronze, Silver, Gold) for scoring context.
+
+
+## 🌒 Moonshots Level 1 → 6 — Requirements & Submission Checklist
 ## 🌐 Live Demo
 [https://nexora-app-chi-indol.vercel.app/](https://nexora-app-chi-indol.vercel.app/)
 
