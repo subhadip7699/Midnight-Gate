@@ -1,6 +1,6 @@
 <div align="center">
 
-  <h1 align="center">🔐 Nexora</h1>
+  <h1 align="center">🔐 Midnight-Gate</h1>
   <h3>Privacy-First Zero-Knowledge Access Control on Midnight Network</h3>
   <p><i>Prove you're authorized — without revealing who you are.</i></p>
 
@@ -25,9 +25,9 @@
 <br />
 <br />
 
-> Confidential, production-grade Zero-Knowledge access control gateway built on the Midnight Network. Nexora lets users prove they are authorized to access a resource — without ever revealing their identity, wallet history, or the underlying credential.
+> Confidential, production-grade Zero-Knowledge access control gateway built on the Midnight Network. Midnight-Gate lets users prove they are authorized to access a resource — without ever revealing their identity, wallet history, or the underlying credential.
 
-**Nexora** replaces traditional wallet-based allowlists and token-gated access with a Zero-Knowledge Merkle membership proof. Members prove they hold a valid, enrolled credential and generate a single-use nullifier locally in their browser — nothing sensitive ever touches the chain. Built for the **First Quarter (Level 3)** challenge as part of the **RiseIn & Midnight Foundation "New Moon to Full: Monthly Moonshots on Midnight" Program 2026**.
+**Midnight-Gate** replaces traditional wallet-based allowlists and token-gated access with a Zero-Knowledge Merkle membership proof. Members prove they hold a valid, enrolled credential and generate a single-use nullifier locally in their browser — nothing sensitive ever touches the chain. Built for the **First Quarter (Level 3)** challenge as part of the **RiseIn & Midnight Foundation "New Moon to Full: Monthly Moonshots on Midnight" Program 2026**.
 
 ---
 ## Level 6 Users
@@ -49,16 +49,16 @@ Summary of top changes made from user feedback:
 
 ## 🌒 Moonshots Level 1 → 6 — Requirements & Submission Checklist
 ## 🌐 Live Demo
-[https://nexora-app-chi-indol.vercel.app/](https://nexora-app-chi-indol.vercel.app/)
+[https://Midnight-Gate-app-chi-indol.vercel.app/](https://Midnight-Gate-app-chi-indol.vercel.app/)
 
 ---
 
 ## 📋 Quick Links & CheckList
 | Network     | Address                                                              |
 | ----------- | -------------------------------------------------------------------- |
-| **🌐Live Demo** | [https://nexora-app-chi-indol.vercel.app/](https://nexora-app-chi-indol.vercel.app/) |
+| **🌐Live Demo** | [https://Midnight-Gate-app-chi-indol.vercel.app/](https://Midnight-Gate-app-chi-indol.vercel.app/) |
 | **Preprod** | `0x85c6d5ce4fec74c33a17d4307290bf7d05878637b9f2e70bead1d90bdf5353cc` |
-| **Demo Video** |[Watch the Nexora Demo Video on Google Drive](https://drive.google.com/file/d/1kORStuYk75lLGvJRnh2td8-BcJ3vEhAo/view?usp=sharing) |
+| **Demo Video** |[Watch the Midnight-Gate Demo Video on Google Drive](https://drive.google.com/file/d/1kORStuYk75lLGvJRnh2td8-BcJ3vEhAo/view?usp=sharing) |
 | CI/CD pipeline running (workflow file + passing runs)                 |               ✅ **Passed**                |
 
 > Preprod deployed. Verify the new address on [Midnight Preprod Explorer](https://preprod.midnightexplorer.com/contracts/85c6d5ce4fec74c33a17d4307290bf7d05878637b9f2e70bead1d90bdf5353cc) 
@@ -124,7 +124,7 @@ Summary of top changes made from user feedback:
 
 ## 🎬 Demo-Video
 
-[Watch the Nexora Demo Video on Google Drive](https://drive.google.com/file/d/1kORStuYk75lLGvJRnh2td8-BcJ3vEhAo/view?usp=sharing)
+[Watch the Midnight-Gate Demo Video on Google Drive](https://drive.google.com/file/d/1kORStuYk75lLGvJRnh2td8-BcJ3vEhAo/view?usp=sharing)
 
 ### What to Record (Under 2 Minutes)
 
@@ -151,7 +151,7 @@ Summary of top changes made from user feedback:
 
 ## 💡 What This Does
 
-Nexora is a privacy-preserving access gateway where:
+Midnight-Gate is a privacy-preserving access gateway where:
 
 1. **Admins** deploy an access gate on the Midnight Preprod network and enroll authorized members by hashing their credentials into a Merkle Tree.
 2. **Members** connect their wallet (Lace or 1AM) and paste their secret credential locally in the browser.
@@ -224,7 +224,7 @@ This creates unnecessary privacy risk for a problem that should require zero dis
 
 ## 💡 Solution
 
-Nexora introduces a Zero-Knowledge access gateway. Instead of exposing a credential to prove access, the flow is:
+Midnight-Gate introduces a Zero-Knowledge access gateway. Instead of exposing a credential to prove access, the flow is:
 
 ```
 Secret Credential
@@ -360,8 +360,8 @@ Only proof validity reaches the blockchain. Secrets remain private forever.
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Rimanshu-Singh/Nexora.git
-cd Nexora
+git clone https://github.com/Rimanshu-Singh/Midnight-Gate.git
+cd Midnight-Gate
 ```
 
 ### 2. Install Dependencies
@@ -412,7 +412,7 @@ Open `http://localhost:3000` in your browser.
 ## 📁 Project Structure
 
 ```text
-Nexora/
+Midnight-Gate/
 ├── contracts/
 │   ├── src/
 │   │   └── vault_pass.compact       ← ZK smart contract
@@ -429,7 +429,7 @@ Nexora/
 │
 ├── contracts/
 │   ├── src/
-│   │     Nexora.compact
+│   │     Midnight-Gate.compact
 │   ├── tests/
 │   └── compiler/
 │
@@ -487,7 +487,7 @@ A GitHub Actions workflow compiles the Compact contract and runs the full test s
 _[placeholder — add CI/CD badge once workflow is live, e.g.]_
 
 ```md
-[![CI/CD Pipeline Status](https://github.com/Rimanshu-Singh/Nexora/actions/workflows/ci.yml/badge.svg)](https://github.com/Rimanshu-Singh/Nexora/actions/workflows/ci.yml)
+[![CI/CD Pipeline Status](https://github.com/Rimanshu-Singh/Midnight-Gate/actions/workflows/ci.yml/badge.svg)](https://github.com/Rimanshu-Singh/Midnight-Gate/actions/workflows/ci.yml)
 ```
 
 ---
@@ -512,7 +512,7 @@ Contracts are deployed through the built-in Admin Dashboard. Each deployment cre
 
 ## 🛡️ Security Model
 
-Nexora never stores:
+Midnight-Gate never stores:
 
 - Raw credentials
 - Identity information
